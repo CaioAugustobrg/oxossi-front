@@ -1,21 +1,44 @@
-import { Container } from "./styles";
+/* eslint-disable no-useless-escape */
+import { Container, Results } from "./styles";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import apiService from "../../services/api";
+import { useState } from "react";
 // falta anoI, datas 
+type FormData = {
+    autores?: string;
+    //anoPub?: string;
+    capitania?: string;
+   // fonte?: string;
+    lugares?: string;
+    nomes?: string;
+    temas?: string;
+  //  tematicas?: string;
+  temaPercent?: string
+  link?: string
+    titulo?: string;
+  }
 const Home = () => {
-    const schema = yup.object({
-        autores: yup
-          .string()
-          .email("Email inválido")
-          .required("Preencha o campo com um email válido."),
+    const [search, setSearch] = useState<FormData[]>([])
+    const schema = yup.object().shape(({
+        autores: yup.string(),
+          anoPub: yup.string(),
+          capitania: yup.string(),
+          fonte: yup.string(),
+          lugares: yup.string(),
+          nomes: yup.string(),
+          temas: yup.string(),
+          tematicas: yup.string(),
+          titulo: yup.string()
+
     
         // password: yup
         // 	.string()
         // 	.min(8, 'Sua senha deve possuir, no mínimo, 8 caracteres.')
         // 	.max(64)
         // 	.required('Preencha o campo com sua senha.'),
-      });
+      }));
       const {
         register,
         handleSubmit,
@@ -23,10 +46,15 @@ const Home = () => {
       } = useForm({
         resolver: yupResolver(schema),
       });
+      const onSubmit = async (data: FormData) => {
+        await apiService.post('/search', data)
+        .then((response) => setSearch(response.data.filteredJson))
+        .catch((error) => console.log(error))
+      }
   return (
     <Container>
         <Container>
-        <form //onSubmit={handleSubmit(onSubmit)}
+        <form onSubmit={handleSubmit(onSubmit)}
         >
           <h4>Buscador de documentos coloniais</h4>
          
@@ -57,47 +85,12 @@ const Home = () => {
                   </p>
                 )}
               </div>
-              <div className="input-container">
-                {/* <label style={{ color: '#000' }}>Insira seu melhor autores</label> */}
-                <input
-                  placeholder="Ano de publicação"
-                  {...register("autores")}
-                />
-                {errors.autores && (
-                  <p
-                    style={{
-                      color: "red",
-                      marginLeft: "auto",
-                      marginRight: "auto",
-                    }}
-                  >
-                    {errors.autores.message}
-                  </p>
-                )}
-              </div>
+            
                 <div className="input-container">
                 {/* <label style={{ color: '#000' }}>Insira seu melhor autores</label> */}
                 <input
                   placeholder="Capitania"
-                  {...register("autores")}
-                />
-                {errors.autores && (
-                  <p
-                    style={{
-                      color: "red",
-                      marginLeft: "auto",
-                      marginRight: "auto",
-                    }}
-                  >
-                    {errors.autores.message}
-                  </p>
-                )}
-              </div>
-              <div className="input-container">
-                {/* <label style={{ color: '#000' }}>Insira seu melhor autores</label> */}
-                <input
-                  placeholder="Fonte"
-                  {...register("autores")}
+                  {...register("capitania")}
                 />
                 {errors.autores && (
                   <p
@@ -115,7 +108,7 @@ const Home = () => {
                 {/* <label style={{ color: '#000' }}>Insira seu melhor autores</label> */}
                 <input
                   placeholder="Lugares"
-                  {...register("autores")}
+                  {...register("lugares")}
                 />
                 {errors.autores && (
                   <p
@@ -133,7 +126,7 @@ const Home = () => {
                 {/* <label style={{ color: '#000' }}>Insira seu melhor autores</label> */}
                 <input
                   placeholder="Nomes"
-                  {...register("autores")}
+                  {...register("nomes")}
                 />
                 {errors.autores && (
                   <p
@@ -151,7 +144,7 @@ const Home = () => {
                 {/* <label style={{ color: '#000' }}>Insira seu melhor autores</label> */}
                 <input
                   placeholder="Temas"
-                  {...register("autores")}
+                  {...register("temas")}
                 />
                 {errors.autores && (
                   <p
@@ -165,29 +158,12 @@ const Home = () => {
                   </p>
                 )}
               </div>
-              <div className="input-container">
-                {/* <label style={{ color: '#000' }}>Insira seu melhor autores</label> */}
-                <input
-                  placeholder="Temáticas: relacionamentos, família etc"
-                  {...register("autores")}
-                />
-                {errors.autores && (
-                  <p
-                    style={{
-                      color: "red",
-                      marginLeft: "auto",
-                      marginRight: "auto",
-                    }}
-                  >
-                    {errors.autores.message}
-                  </p>
-                )}
-              </div>
+           
               <div className="input-container">
                 {/* <label style={{ color: '#000' }}>Insira seu melhor autores</label> */}
                 <input
                   placeholder="Título"
-                  {...register("autores")}
+                  {...register("titulo")}
                 />
                 {errors.autores && (
                   <p
@@ -204,19 +180,39 @@ const Home = () => {
               <button
                // onClick={handleSubmit(sendEmailAndPassword)}
                 className="btn-default"
-                style={{
-                  color: "#fff",
-                  height: "45px",
-                  backgroundColor: "#050504",
-                }}
                 type="submit"
               >
                 Buscar
               </button>
             </>
           {/* )} */}
-        
+          
         </form>
+        {search.map((item,index) => (
+            
+            <Results key={index}>
+                <span><h5>Título: </h5><h6>{item?.titulo}</h6></span>
+                <span><h5>Autores: </h5><h6>{item?.autores}</h6></span>
+
+                <span><h5>Capitania: </h5><h6>{item?.capitania}</h6></span>
+                <span><h5>Lugares: </h5><h6> {item?.lugares ? item.lugares.replace(/[\[\]']/g, '') : ''}</h6></span>
+                <span><h5>Nomes: </h5><h6>{item?.nomes ? item.nomes.replace(/[\[\]']/g, '') : ''}</h6></span>
+                <span><h5>Temas: </h5><h6>{item?.temas}</h6></span>
+                <span><h5>Distribuição dos temas:</h5><h6> {item?.temaPercent}</h6></span>
+                <span>
+                 <h5>Link: </h5>
+                <h6>
+                {item?.link ? (
+                    <a href={item.link} target="_blank" rel="noopener noreferrer">
+                    {item.link}
+                    </a>
+                    ) : ''}
+                </h6>
+                </span>
+        </Results>
+            
+        ))
+        }
       </Container>
     </Container>
   );
