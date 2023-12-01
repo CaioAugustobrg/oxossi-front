@@ -18,7 +18,7 @@ export const Results = styled.div`
     width: 70%;
     border: 2px solid #000;
     border-radius: 8px;
-    padding: 5px;
+    padding: 0 5px;
     margin:  10px auto;
     text-align: justify;
     text-transform: capitalize;
