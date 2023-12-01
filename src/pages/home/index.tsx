@@ -1,34 +1,32 @@
 /* eslint-disable no-useless-escape */
-import { Container, Results } from "./styles";
+import { Container } from "./styles";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { Spin } from "antd";
+import { BsSearch } from "react-icons/bs";
 import apiService from "../../services/api";
-import { useState } from "react";
-// falta anoI, datas 
-type FormData = {
-    autores?: string;
-    //anoPub?: string;
-    capitania?: string;
-   // fonte?: string;
-    lugares?: string;
-    nomes?: string;
-    temas?: string;
-  //  tematicas?: string;
-  temaPercent?: string
-  link?: string
-    titulo?: string;
-  }
+import { useNavigate } from "react-router-dom";
+import { useContext, useState } from "react";
+import searchContext from "../../context";
+import { FormData } from "../../types";
+import { toast } from "react-toastify";
+import fieldsContext from "../../context/field";
 const Home = () => {
-    const [search, setSearch] = useState<FormData[]>([])
+  const { setSearch } = useContext(searchContext)
+  const { setField } = useContext(fieldsContext)
+
+  const navigate = useNavigate();
+    //const [search, setSearch] = useState<FormData[]>([])
+    const [loading, setLoading] = useState(false);
     const schema = yup.object().shape(({
-        autores: yup.string(),
+          autores: yup.string(),
           anoPub: yup.string(),
           capitania: yup.string(),
           fonte: yup.string(),
           lugares: yup.string(),
           nomes: yup.string(),
-          temas: yup.string(),
+          temas: yup.string().required("O campo 'Temas' é obrigatório"),
           tematicas: yup.string(),
           titulo: yup.string()
 
@@ -47,12 +45,28 @@ const Home = () => {
         resolver: yupResolver(schema),
       });
       const onSubmit = async (data: FormData) => {
+         
+        setLoading(true);
+        setField(data)
+
         await apiService.post('/search', data)
-        .then((response) => setSearch(response.data.filteredJson))
-        .catch((error) => console.log(error))
+        .then((response)  =>  {
+           setSearch(response.data.searchThoseBooks)
+           console.log(response.data.searchThoseBooks)
+                     if (response.status === 200) {
+            navigate('/search')
+          }
+        })
+        .catch((error) => {
+          toast.error('Nenhum artigo encontrado')
+          console.log(error)})
+        .finally(() => {
+         
+          setLoading(false);
+        })
       }
   return (
-    <Container>
+   
         <Container>
         <form onSubmit={handleSubmit(onSubmit)}
         >
@@ -67,6 +81,24 @@ const Home = () => {
           </div>
            {/* {showEmailInputs && ( */}
            <>
+           <div className="input-container">
+                {/* <label style={{ color: '#000' }}>Insira seu melhor autores</label> */}
+                <input
+                  placeholder="Temas: políticas, relacionamentos etc"
+                  {...register("temas")}
+                />
+                {errors.temas && (
+                  <p
+                    style={{
+                      color: "#000",
+                      marginLeft: "auto",
+                      marginRight: "auto",
+                    }}
+                  >
+                    {errors.temas.message}
+                  </p>
+                )}
+              </div>
               <div className="input-container">
                 {/* <label style={{ color: '#000' }}>Insira seu melhor email</label> */}
                 <input
@@ -89,13 +121,13 @@ const Home = () => {
                 <div className="input-container">
                 {/* <label style={{ color: '#000' }}>Insira seu melhor autores</label> */}
                 <input
-                  placeholder="Capitania"
+                  placeholder="Capitania: São Paulo, Pernambuco etc"
                   {...register("capitania")}
                 />
                 {errors.autores && (
                   <p
                     style={{
-                      color: "red",
+                      color: "#000",
                       marginLeft: "auto",
                       marginRight: "auto",
                     }}
@@ -107,13 +139,13 @@ const Home = () => {
               <div className="input-container">
                 {/* <label style={{ color: '#000' }}>Insira seu melhor autores</label> */}
                 <input
-                  placeholder="Lugares"
+                  placeholder="Lugares: Ceará, Goiás etc"
                   {...register("lugares")}
                 />
                 {errors.autores && (
                   <p
                     style={{
-                      color: "red",
+                      color: "#000",
                       marginLeft: "auto",
                       marginRight: "auto",
                     }}
@@ -125,10 +157,10 @@ const Home = () => {
               <div className="input-container">
                 {/* <label style={{ color: '#000' }}>Insira seu melhor autores</label> */}
                 <input
-                  placeholder="Nomes"
+                  placeholder="Nomes: Maria de Santos, Manuel etc"
                   {...register("nomes")}
                 />
-                {errors.autores && (
+                {errors.nomes && (
                   <p
                     style={{
                       color: "red",
@@ -136,28 +168,11 @@ const Home = () => {
                       marginRight: "auto",
                     }}
                   >
-                    {errors.autores.message}
+                    {errors.nomes.message}
                   </p>
                 )}
               </div>
-              <div className="input-container">
-                {/* <label style={{ color: '#000' }}>Insira seu melhor autores</label> */}
-                <input
-                  placeholder="Temas"
-                  {...register("temas")}
-                />
-                {errors.autores && (
-                  <p
-                    style={{
-                      color: "red",
-                      marginLeft: "auto",
-                      marginRight: "auto",
-                    }}
-                  >
-                    {errors.autores.message}
-                  </p>
-                )}
-              </div>
+            
            
               <div className="input-container">
                 {/* <label style={{ color: '#000' }}>Insira seu melhor autores</label> */}
@@ -178,17 +193,28 @@ const Home = () => {
                 )}
               </div>
               <button
-               // onClick={handleSubmit(sendEmailAndPassword)}
-                className="btn-default"
-                type="submit"
-              >
-                Buscar
-              </button>
+                  className="page-btn"
+                  type="submit"
+                  disabled={loading}
+                >
+                  {loading ? (
+                    <Spin
+                      rootClassName="loading-spin"
+                    />
+                  ) : (
+                    <div>
+                    <BsSearch />
+                    <p>Pesquisar</p>
+                    </div>
+                    
+
+                  )}
+                </button>
             </>
           {/* )} */}
           
         </form>
-        {search.map((item,index) => (
+        {/* {search.map((item,index) => (
             
             <Results key={index}>
                 <span><h5>Título: </h5><h6>{item?.titulo}</h6></span>
@@ -212,9 +238,10 @@ const Home = () => {
         </Results>
             
         ))
-        }
+        } */}
+
       </Container>
-    </Container>
+   
   );
 };
 

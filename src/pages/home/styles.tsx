@@ -3,14 +3,18 @@ import styled from "styled-components";
 export const Container = styled.div`
 box-sizing: border-box;
 display: flex;
-width: 100%;
+width: 70%;
 overflow-x: hidden;
 flex-direction: column;
 justify-content: space-between;
 /* max-width: 1550px; */
 margin: 0 auto;
 min-height: 100%;
-padding: 0px 250px;
+//padding: 0px 250px;
+.loading-spin i {
+    color: #FFF;
+    background-color: #FFF;
+  }
 div.input-container {
     width: 100%;    
     margin-top: 16px;
@@ -55,10 +59,18 @@ div.input-container {
       display: flex;
       color: #fff;
       height: 45px;
-      background-color: #050504;
+      background-color: #110902;
       justify-content: center;
       height: 45px;
       width: 100%;
+      div {
+        display: flex;
+        align-items: center;
+        font-size: 20px;
+      p {
+        padding-left: 10px;
+      }
+      }
       i {
         padding-right: 3%;
         align-items: center;
@@ -74,24 +86,4 @@ div.input-container {
 @media(max-width: 768px) {
     padding: 0;
   }
-`
-
-export const Results = styled.div`
-    width: 100%;
-    border: 2px solid #000;
-    border-radius: 8px;
-    padding: 5px;
-    margin: 5px;
-    text-align: justify;
-    text-transform: capitalize;
-    span {
-        display: flex;
-        h5 {
-            padding-right: 8px;
-        }
-        h6 {
-            font-weight: 500;
-        }
-        
-    }
 `
