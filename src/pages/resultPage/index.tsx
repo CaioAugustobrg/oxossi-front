@@ -10,8 +10,7 @@ const ResultPage = () => {
 
     const {search} = useContext(searchContext)
     const {field} = useContext(fieldsContext)
-    
-    console.log(search)
+
     const goBackHome = () => {
         navigate('/')
     }
@@ -39,7 +38,7 @@ const ResultPage = () => {
         {search.map((item: FormData ,index: string | number) => (
             
             <Results key={index}>
-                <span><h5>Título: </h5><h6>{item?.autores}</h6></span>
+                <span><h5>Título: </h5><h6>{item?.titulo}</h6></span>
                 <span><h5>Autores: </h5><h6>{item?.autores}</h6></span>
 
                 <span><h5>Capitania: </h5><h6>{item?.capitania}</h6></span>
