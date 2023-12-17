@@ -124,11 +124,9 @@ const NewForm: React.FC = () => {
         }
         if (response?.status === 200) {
           navigate('/search');
-        } else {
-          toast.error('Nenhum artigo encontrado');
         }
       } catch (error) {
-        toast.error('Ocorreu um erro ao buscar os artigos');
+        toast.error('Nenhum artigo encontrado');
         console.error(error);
       }
    
@@ -151,7 +149,7 @@ const NewForm: React.FC = () => {
       >
         
 
-       <Title>Buscador de artigos sobre o Brasil Colonia</Title> 
+       <Title>Buscador de artigos sobre o Brasil Colônia</Title> 
       <StyledForm.Item
       style={{}}
       name="temas"
@@ -239,8 +237,8 @@ const NewForm: React.FC = () => {
         <Button style={{marginRight: '240px'}} type="primary" htmlType="submit">
           Pesquisar
         </Button>
-        <Tooltip title="Useful information">
-          <Typography.Link href="#API">Precisa de ajuda ?</Typography.Link>
+        <Tooltip title="Veja um exemplo de busca">
+          <Typography.Link href="/help/search">Precisa de ajuda ?</Typography.Link>
         </Tooltip>
       </StyledForm.Item>
         
