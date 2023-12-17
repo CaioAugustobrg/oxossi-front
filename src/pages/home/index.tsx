@@ -1,5 +1,4 @@
 /* eslint-disable no-useless-escape */
-import { Container } from "./styles";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -67,7 +66,7 @@ const Home = () => {
       }
   return (
    
-        <Container>
+        <div>
         <form onSubmit={handleSubmit(onSubmit)}
         >
           <h4>Buscador de documentos coloniais</h4>
@@ -240,7 +239,7 @@ const Home = () => {
         ))
         } */}
 
-      </Container>
+      </div>
    
   );
 };
