@@ -7,9 +7,9 @@ const ItemsPerPage = 8;
 
 const PaginatedSearchResults: React.FC<{ searchData: any[] }> = ({ searchData }) => {
   const [currentlyPage, setCurrently] = useState(1);
-  const indiceInicial = (currentlyPage - 1) * ItemsPerPage;
-  const indiceFinal = currentlyPage * ItemsPerPage;
-  const itensDaPagina = searchData.slice(indiceInicial, indiceFinal);
+  const InitialIndex = (currentlyPage - 1) * ItemsPerPage;
+  const FinalIndex = currentlyPage * ItemsPerPage;
+  const PageItems = searchData.slice(InitialIndex, FinalIndex);
 
   const onChangePage = (pagina: number) => {
     setCurrently(pagina);
@@ -19,7 +19,7 @@ const PaginatedSearchResults: React.FC<{ searchData: any[] }> = ({ searchData })
   }, [currentlyPage]);
   return (
     <div>
-      {itensDaPagina.map((item: FormData, index: number) => (
+      {PageItems.map((item: FormData, index: number) => (
         <Results key={index}>
           <span>
             <h5>Título: </h5>
