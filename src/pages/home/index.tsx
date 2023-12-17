@@ -1,247 +1,251 @@
-/* eslint-disable no-useless-escape */
-import * as yup from "yup";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { Spin } from "antd";
-import { BsSearch } from "react-icons/bs";
-import apiService from "../../services/api";
-import { useNavigate } from "react-router-dom";
-import { useContext, useState } from "react";
-import searchContext from "../../context";
-import { FormData } from "../../types";
-import { toast } from "react-toastify";
-import fieldsContext from "../../context/field";
-const Home = () => {
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import React, { useContext } from 'react';
+import {
+  Button,
+  DatePicker,
+  Form,
+  Input,
+  Tooltip,
+  Typography,
+} from 'antd';
+import apiService from '../../services/api';
+import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
+import searchContext from '../../context';
+import fieldsContext from '../../context/field';
+import { StyledForm, Title } from './styles';
+const { RangePicker } = DatePicker;
+// interface DataNodeType {
+//   value: string;
+//   label: string;
+//   children?: DataNodeType[];
+// }
+
+// const residences: CascaderProps<DataNodeType>['options'] = [
+//   {
+//     value: 'zhejiang',
+//     label: 'Zhejiang',
+//     children: [
+//       {
+//         value: 'hangzhou',
+//         label: 'Hangzhou',
+//         children: [
+//           {
+//             value: 'xihu',
+//             label: 'West Lake',
+//           },
+//         ],
+//       },
+//     ],
+//   },
+//   {
+//     value: 'jiangsu',
+//     label: 'Jiangsu',
+//     children: [
+//       {
+//         value: 'nanjing',
+//         label: 'Nanjing',
+//         children: [
+//           {
+//             value: 'zhonghuamen',
+//             label: 'Zhong Hua Men',
+//           },
+//         ],
+//       },
+//     ],
+//   },
+// ];
+
+const rangeConfig = {
+  rules: [{ type: 'array' as const, required: false}],
+};
+
+const formItemLayout = {
+  labelCol: {
+    xs: { span: 24 },
+    sm: { span: 8 },
+  },
+  wrapperCol: {
+    xs: { span: 24 },
+    sm: { span: 16 },
+  },
+};
+
+const tailFormItemLayout = {
+  wrapperCol: {
+    xs: {
+      span: 24,
+      offset: 0,
+ 
+    },
+    sm: {
+      span: 16,
+      offset: 8,
+    },
+  },
+};
+
+const NewForm: React.FC = () => {
   const { setSearch } = useContext(searchContext)
   const { setField } = useContext(fieldsContext)
-
   const navigate = useNavigate();
-    //const [search, setSearch] = useState<FormData[]>([])
-    const [loading, setLoading] = useState(false);
-    const schema = yup.object().shape(({
-          autores: yup.string(),
-          anoPub: yup.string(),
-          capitania: yup.string(),
-          fonte: yup.string(),
-          lugares: yup.string(),
-          nomes: yup.string(),
-          temas: yup.string().required("O campo 'Temas' é obrigatório"),
-          tematicas: yup.string(),
-          titulo: yup.string()
 
-    
-        // password: yup
-        // 	.string()
-        // 	.min(8, 'Sua senha deve possuir, no mínimo, 8 caracteres.')
-        // 	.max(64)
-        // 	.required('Preencha o campo com sua senha.'),
-      }));
-      const {
-        register,
-        handleSubmit,
-        formState: { errors },
-      } = useForm({
-        resolver: yupResolver(schema),
-      });
-      const onSubmit = async (data: FormData) => {
-         
-        setLoading(true);
-        setField(data)
+  const onFinish = async (fieldsValue: any) => {
+    const { 'range-picker': rangePickerValues, ...otherFields } = fieldsValue;
+  
+      try {
+        let response;
+        if (rangePickerValues && Array.isArray(rangePickerValues) && rangePickerValues.length === 2) {
 
-        await apiService.post('/search', data)
-        .then((response)  =>  {
-           setSearch(response.data.searchThoseBooks)
-           console.log(response.data.searchThoseBooks)
-                     if (response.status === 200) {
-            navigate('/search')
-          }
-        })
-        .catch((error) => {
-          toast.error('Nenhum artigo encontrado')
-          console.log(error)})
-        .finally(() => {
-         
-          setLoading(false);
-        })
-      }
-  return (
-   
-        <div>
-        <form onSubmit={handleSubmit(onSubmit)}
-        >
-          <h4>Buscador de documentos coloniais</h4>
-         
-          <div>
-            {/* <button className="btn-default" >
-              <i style={{ color: "gray" }}>
-               
-              </i>
-            </button> */}
-          </div>
-           {/* {showEmailInputs && ( */}
-           <>
-           <div className="input-container">
-                {/* <label style={{ color: '#000' }}>Insira seu melhor autores</label> */}
-                <input
-                  placeholder="Temas: políticas, relacionamentos etc"
-                  {...register("temas")}
-                />
-                {errors.temas && (
-                  <p
-                    style={{
-                      color: "#000",
-                      marginLeft: "auto",
-                      marginRight: "auto",
-                    }}
-                  >
-                    {errors.temas.message}
-                  </p>
-                )}
-              </div>
-              <div className="input-container">
-                {/* <label style={{ color: '#000' }}>Insira seu melhor email</label> */}
-                <input
-                  placeholder="Autor"
-                  {...register("autores")}
-                />
-                {errors.autores && (
-                  <p
-                    style={{
-                      color: "red",
-                      marginLeft: "auto",
-                      marginRight: "auto",
-                    }}
-                  >
-                    {errors.autores.message}
-                  </p>
-                )}
-              </div>
-            
-                <div className="input-container">
-                {/* <label style={{ color: '#000' }}>Insira seu melhor autores</label> */}
-                <input
-                  placeholder="Capitania: São Paulo, Pernambuco etc"
-                  {...register("capitania")}
-                />
-                {errors.autores && (
-                  <p
-                    style={{
-                      color: "#000",
-                      marginLeft: "auto",
-                      marginRight: "auto",
-                    }}
-                  >
-                    {errors.autores.message}
-                  </p>
-                )}
-              </div>
-              <div className="input-container">
-                {/* <label style={{ color: '#000' }}>Insira seu melhor autores</label> */}
-                <input
-                  placeholder="Lugares: Ceará, Goiás etc"
-                  {...register("lugares")}
-                />
-                {errors.autores && (
-                  <p
-                    style={{
-                      color: "#000",
-                      marginLeft: "auto",
-                      marginRight: "auto",
-                    }}
-                  >
-                    {errors.autores.message}
-                  </p>
-                )}
-              </div>
-              <div className="input-container">
-                {/* <label style={{ color: '#000' }}>Insira seu melhor autores</label> */}
-                <input
-                  placeholder="Nomes: Maria de Santos, Manuel etc"
-                  {...register("nomes")}
-                />
-                {errors.nomes && (
-                  <p
-                    style={{
-                      color: "red",
-                      marginLeft: "auto",
-                      marginRight: "auto",
-                    }}
-                  >
-                    {errors.nomes.message}
-                  </p>
-                )}
-              </div>
-            
-           
-              <div className="input-container">
-                {/* <label style={{ color: '#000' }}>Insira seu melhor autores</label> */}
-                <input
-                  placeholder="Título"
-                  {...register("titulo")}
-                />
-                {errors.autores && (
-                  <p
-                    style={{
-                      color: "red",
-                      marginLeft: "auto",
-                      marginRight: "auto",
-                    }}
-                  >
-                    {errors.autores.message}
-                  </p>
-                )}
-              </div>
-              <button
-                  className="page-btn"
-                  type="submit"
-                  disabled={loading}
-                >
-                  {loading ? (
-                    <Spin
-                      rootClassName="loading-spin"
-                    />
-                  ) : (
-                    <div>
-                    <BsSearch />
-                    <p>Pesquisar</p>
-                    </div>
-                    
-
-                  )}
-                </button>
-            </>
-          {/* )} */}
           
-        </form>
-        {/* {search.map((item,index) => (
-            
-            <Results key={index}>
-                <span><h5>Título: </h5><h6>{item?.titulo}</h6></span>
-                <span><h5>Autores: </h5><h6>{item?.autores}</h6></span>
+          
+          const years = rangePickerValues.map((dateString: string) => {
+          return new Date(dateString).getFullYear();
+        });
+  
+        const yearsPayload = {
+          ...otherFields,
+          datas: {
+            anoInicial: years[0],
+            anoFinal: years[1],
+          },
+        };
+        console.log(yearsPayload)
+        setField(yearsPayload);
+        response = await apiService.post('/search', yearsPayload);
+        setSearch(response?.data.searchThoseBooks);
+        
+  
+        } else {
+          response = await apiService.post('/search', fieldsValue);
+          setField(fieldsValue);
+          setSearch(response?.data.searchThoseBooks);
 
-                <span><h5>Capitania: </h5><h6>{item?.capitania}</h6></span>
-                <span><h5>Lugares: </h5><h6> {item?.lugares ? item.lugares.replace(/[\[\]']/g, '') : ''}</h6></span>
-                <span><h5>Nomes: </h5><h6>{item?.nomes ? item.nomes.replace(/[\[\]']/g, '') : ''}</h6></span>
-                <span><h5>Temas: </h5><h6>{item?.temas}</h6></span>
-                <span><h5>Distribuição dos temas:</h5><h6> {item?.temaPercent}</h6></span>
-                <span>
-                 <h5>Link: </h5>
-                <h6>
-                {item?.link ? (
-                    <a href={item.link} target="_blank" rel="noopener noreferrer">
-                    {item.link}
-                    </a>
-                    ) : ''}
-                </h6>
-                </span>
-        </Results>
-            
-        ))
-        } */}
-
-      </div>
+        }
+        if (response?.status === 200) {
+          navigate('/search');
+        } else {
+          toast.error('Nenhum artigo encontrado');
+        }
+      } catch (error) {
+        toast.error('Ocorreu um erro ao buscar os artigos');
+        console.error(error);
+      }
    
+  };
+  
+  const [form] = Form.useForm();
+
+  return (
+    
+    <StyledForm
+      {...formItemLayout}
+      form={form}
+      name="register"
+      size='large'
+      onFinish={onFinish}
+
+      
+      scrollToFirstError
+      
+      >
+        
+
+       <Title>Buscador de artigos sobre o Brasil Colonia</Title> 
+      <StyledForm.Item
+      style={{}}
+      name="temas"
+      label="Tema"
+      tooltip="Experimente buscar por política."
+      rules={[
+        {
+            type: 'string',
+            message: 'Esse não é um tema válido.',
+          },
+          {
+            required: true,
+            message: 'Por favor, insira o tema',
+          },
+        ]}
+      >
+        <Input />
+      </StyledForm.Item>
+
+      <StyledForm.Item 
+      tooltip="Experimente buscar de 1555 até 1782"
+      name="range-picker"
+      label="Data"
+      {...rangeConfig}>
+        
+      <RangePicker />
+
+    </StyledForm.Item>
+   
+      <StyledForm.Item
+        name="autores"
+        label="Autor"
+        //tooltip="What do you want others to call you?"
+        rules={[{ required: false, whitespace: true }]}
+      >
+        <Input />
+      </StyledForm.Item>
+
+   
+
+      <StyledForm.Item
+        name="tematicas"
+        label="Temática"
+        rules={[{ required: false }]}
+      >
+        <Input  />
+      </StyledForm.Item>
+
+      <StyledForm.Item
+        name="capitania"
+        label="Capitania"
+        rules={[{ required: false }]}
+        >
+        <Input  />
+      </StyledForm.Item>
+
+     
+
+      <StyledForm.Item
+        name="lugares"
+        label="Lugares"
+        rules={[{ required: false }]}
+      >
+        <Input  />
+      </StyledForm.Item>
+
+      <StyledForm.Item
+        name="nomes"
+        label="Nomes"
+        rules={[{ required: false }]}
+      >
+        <Input  />
+      </StyledForm.Item>
+     
+      <StyledForm.Item
+        name="titulo"
+        label="Título"
+        rules={[{ required: false }]}
+      >
+        <Input  />
+      </StyledForm.Item>
+
+
+      <StyledForm.Item  {...tailFormItemLayout}>
+        <Button style={{marginRight: '240px'}} type="primary" htmlType="submit">
+          Pesquisar
+        </Button>
+        <Tooltip title="Useful information">
+          <Typography.Link href="#API">Precisa de ajuda ?</Typography.Link>
+        </Tooltip>
+      </StyledForm.Item>
+        
+    </StyledForm>
   );
 };
 
-export default Home;
+export default NewForm;
