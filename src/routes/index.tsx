@@ -7,7 +7,7 @@ import {
 } from 'react-router-dom';
 //import Home from '../pages/home';
 import ResultPage from '../pages/resultPage';
-import NewForm from '../pages/home/newform';
+import NewForm from '../pages/home/index';
 import HelpPage from '../pages/HelpPage';
 
 
