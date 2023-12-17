@@ -23,6 +23,7 @@ export const Results = styled.div`
     text-align: justify;
     text-transform: capitalize;
     span {
+        
         display: flex;
         h5 {
             padding-right: 8px;
@@ -39,7 +40,7 @@ width: 100%;
 height: 60px;
 
 span {
-    color: #ffffff;
+    color: #000;
     align-items: center;
     display: flex;
     height: auto;
@@ -48,7 +49,7 @@ span {
     h2 {
         cursor: pointer;
         &:hover {
-            color: black
+            color: gray
         }
     }
 }`
@@ -58,7 +59,7 @@ font-size: 25px;
 margin: 15px;
 cursor: pointer;
 &:hover {
-            color: black
+            color: gray
         }
 `
 
