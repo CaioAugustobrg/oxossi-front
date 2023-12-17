@@ -39,8 +39,7 @@ html:focus-within {
 
 /* Set core body defaults */
 body {
-  min-height: 100vh;
-  background-color: #b68e0b;
+  background-color: #ffffff;
   height: 100vh;
   font-family: 'Inter', sans-serif;
   text-rendering: optimizeSpeed;
