@@ -42,6 +42,7 @@ baseURL: this.endPoint,
      return response
    }
  }
+ 
 const API_ENDPOINT = 'https://oxossi-back-a69bc45ce8e9.herokuapp.com/'
 const apiService = new ApiService(API_ENDPOINT)
 
