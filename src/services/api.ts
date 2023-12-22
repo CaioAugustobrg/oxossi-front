@@ -42,7 +42,7 @@ baseURL: this.endPoint,
      return response
    }
  }
-const API_ENDPOINT = 'https://safe-anchorage-58532-8699eca4510c.herokuapp.com/'
+const API_ENDPOINT = 'https://oxossi-back-a69bc45ce8e9.herokuapp.com/'
 const apiService = new ApiService(API_ENDPOINT)
 
 export default apiService
