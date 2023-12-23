@@ -11,6 +11,7 @@ justify-content: space-between;
 /* max-width: 1550px; */
 margin: 0 auto;
 min-height: 100%;
+
 //padding: 0px 250px;
 `
 
@@ -23,16 +24,38 @@ export const Results = styled.div`
     text-align: justify;
     text-transform: capitalize;
     span {
-        
+        @media(max-width: 768px) {
+         flex-direction: column;
+}
         display: flex;
         h5 {
+            margin-bottom: 2px;
             padding-right: 8px;
+            @media(max-width: 768px) {
+         flex-direction: column;
+         margin-bottom: 0;
+
+}
         }
         h6 {
             font-weight: 500;
+            margin-bottom: 2px;
+            @media(max-width: 768px) {
+         flex-direction: column;
+         margin-bottom: 0;
+
+}
+
+         
+
+            
         }
         
     }
+    @media(max-width: 768px) {
+         width: 95%;
+         
+}
 `
 
 export const Header = styled.header`
