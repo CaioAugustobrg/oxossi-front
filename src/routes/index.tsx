@@ -17,7 +17,7 @@ const AppRoutes = () => {
 			<Routes>
 				<Route path='/' element={<NewForm />} />
 				<Route path="/search" element={ <ResultPage /> } />
-				<Route path="/help/search" element={ <HelpPage /> }/>
+				<Route path="/help" element={ <HelpPage /> }/>
 				<Route path="*" element={<Navigate replace to="/"/>} />
 
 				
