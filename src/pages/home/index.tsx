@@ -112,12 +112,12 @@ const NewForm: React.FC = () => {
         };
         console.log(yearsPayload)
         setField(yearsPayload);
-        response = await apiService.post('/search', yearsPayload);
+        response = await apiService.post('/', yearsPayload);
         setSearch(response?.data.searchThoseBooks);
         
   
         } else {
-          response = await apiService.post('/search', fieldsValue);
+          response = await apiService.post('/', fieldsValue);
           setField(fieldsValue);
           setSearch(response?.data.searchThoseBooks);
 
