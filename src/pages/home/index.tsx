@@ -238,7 +238,7 @@ const NewForm: React.FC = () => {
           Pesquisar
         </Button>
         <Tooltip title="Veja um exemplo de busca">
-          <Typography.Link href="/search/help">Precisa de ajuda ?</Typography.Link>
+          <Typography.Link href="/help">Precisa de ajuda ?</Typography.Link>
         </Tooltip>
       </StyledForm.Item>
         
