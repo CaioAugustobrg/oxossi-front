@@ -25,7 +25,7 @@ width: 100%;
 overflow-x: hidden;
 flex-direction: column;
 justify-content: space-between;
-padding: 40px;
+
 /* max-width: 1550px; */
 margin: 0 auto;
 min-height: 100%;

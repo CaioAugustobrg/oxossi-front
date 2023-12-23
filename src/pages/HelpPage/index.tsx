@@ -28,6 +28,7 @@ const HelpPage = () => {
           <h2>Fazer a busca</h2>
         </span>
       </Header>
+      
       <Title>A seguir, uma explicação de como você pode realizar um busca:</Title>
       <InformativeText>
         <p>
