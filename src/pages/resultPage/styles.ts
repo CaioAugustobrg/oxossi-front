@@ -20,10 +20,54 @@ export const Results = styled.div`
     border: 2px solid #000;
     border-radius: 8px;
     padding: 0 5px;
-    margin:  10px auto;
+    margin: 10px auto;
+    text-align: justify;
+    text-transform: capitalize;
+    cursor: pointer;
+    transition: border-color 0.3s, box-shadow 0.3s;
+
+    &:hover {
+        border-color: #808080; 
+        box-shadow: 0 0 5px rgba(128, 128, 128, 0.3); 
+    }
+
+    span {
+        font-size: 18px;
+        display: flex;
+
+        h5 {
+            padding-right: 8px;
+        }
+
+        h6 {
+            font-weight: 500;
+            margin-bottom: 2px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        width: 95%;
+
+        span {
+            flex-direction: column;
+            margin-bottom: 0;
+        }
+
+        h5 {
+            flex-direction: column;
+            margin-bottom: 0;
+        }
+    }
+`;
+export const ModalResults = styled.div`
+    width: 70%;
+    border-radius: 8px;
+    padding: 0 5px;
+   // margin:  10px auto;
     text-align: justify;
     text-transform: capitalize;
     span {
+        font-size: 18px;
         @media(max-width: 768px) {
          flex-direction: column;
 }
