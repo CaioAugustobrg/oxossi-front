@@ -19,5 +19,5 @@ $ npm i
 ### Rodando a aplicação
 
 ```bash
-$ npm run start
+$ npm run dev
 ```
